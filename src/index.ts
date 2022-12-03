@@ -1,3 +1,3 @@
-import { Add } from './Add.js';
+import { SmartContractMul } from './SmartContractMul.js';
 
-export { Add };
+export { SmartContractMul };
