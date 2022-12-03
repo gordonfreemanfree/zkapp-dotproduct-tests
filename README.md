@@ -11,8 +11,9 @@ npm run build
 ## How to run tests
 
 ```sh
-npm run test
-npm run testw # watch mode
+run the File Localtest.ts to reproduce the errors.
+
+If you change the size of the matrix the script will run. Errors start to occur when you use 20x20 matrix. 
 ```
 
 ## How to run coverage
