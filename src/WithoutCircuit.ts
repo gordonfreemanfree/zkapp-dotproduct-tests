@@ -1,63 +1,61 @@
 // Description
-// With this file I'm trying to do a dot product on two rank 2 tensors of type Int65.
+// With this file I'm trying to do a dot product on two rank 2 tensors of type Int64.
 // this is run outside of circuit. and it works fine.
 // I'm trying to do the same thing inside of circuit, but I'm getting an error.
-import { isReady, matrixProp } from 'snarkyjs';
+import { isReady, matrixProp, Int64 } from 'snarkyjs';
 await isReady;
 
 const MATRIX_LENGTH = 20;
 
-import { Int65 } from './Int65_v4.js';
-
 // creating a class for the matrix in order to get fixed size
 // if working with different size, you need to change the size of the matrix and the for loop in the dot product and the transpose function
 export class Matrix1 {
-  @matrixProp(Int65, MATRIX_LENGTH, MATRIX_LENGTH) value: Int65[][];
+  @matrixProp(Int64, MATRIX_LENGTH, MATRIX_LENGTH) value: Int64[][];
 
   constructor(matrix: number[][]) {
-    this.value = this.num2int65_t2(matrix);
+    this.value = this.num2Int64_t2(matrix);
   }
 
-  num2int65_t2(x: Array<number>[]): Array<Int65>[] {
+  num2Int64_t2(x: Array<number>[]): Array<Int64>[] {
     let y = Array();
-    x.forEach((value, index) => (y[index] = this.num2int65_t1(value)));
+    x.forEach((value, index) => (y[index] = this.num2Int64_t1(value)));
     return y;
   }
 
-  num2int65_t1(x: Array<number>): Array<Int65> {
+  num2Int64_t1(x: Array<number>): Array<Int64> {
     let y = Array();
-    x.forEach((value, index) => (y[index] = this.num2int65(value)));
+    x.forEach((value, index) => (y[index] = this.num2Int64(value)));
     return y;
   }
-  num2int65(x: number): Int65 {
-    return Int65.from(x);
+  num2Int64(x: number): Int64 {
+    return Int64.from(x);
     // commenting this scale factor out for now
-    // return Int65.from(Math.floor(x * this.scale_factor));
+    // return Int64.from(Math.floor(x * this.scale_factor));
   }
 }
 
 export class Matrix2 {
-  @matrixProp(Int65, MATRIX_LENGTH, MATRIX_LENGTH) value: Int65[][];
+  @matrixProp(Int64, MATRIX_LENGTH, MATRIX_LENGTH) value: Int64[][];
 
   constructor(matrix: number[][]) {
-    this.value = this.num2int65_t2(matrix);
+    this.value = this.num2Int64_t2(matrix);
   }
 
-  num2int65_t2(x: Array<number>[]): Array<Int65>[] {
+  num2Int64_t2(x: Array<number>[]): Array<Int64>[] {
     let y = Array();
-    x.forEach((value, index) => (y[index] = this.num2int65_t1(value)));
+    x.forEach((value, index) => (y[index] = this.num2Int64_t1(value)));
     return y;
   }
 
-  num2int65_t1(x: Array<number>): Array<Int65> {
+  num2Int64_t1(x: Array<number>): Array<Int64> {
     let y = Array();
-    x.forEach((value, index) => (y[index] = this.num2int65(value)));
+    x.forEach((value, index) => (y[index] = this.num2Int64(value)));
     return y;
   }
-  num2int65(x: number): Int65 {
-    return Int65.from(x);
+  num2Int64(x: number): Int64 {
+    return Int64.from(x);
     // commenting this scale factor out for now
-    // return Int65.from(Math.floor(x * this.scale_factor));
+    // return Int64.from(Math.floor(x * this.scale_factor));
   }
 }
 
@@ -65,16 +63,16 @@ export class SmartContractMul {
   // just a check to see if the dot product is working correctly because we update the state after the dot product
 
   // method for matrix multiplication
-  dot_product_t2(m1: Matrix1, m2: Matrix2): Int65[][] {
+  dot_product_t2(m1: Matrix1, m2: Matrix2): Int64[][] {
     console.log('in the dot product');
     // Perform a dot product on the two rank 2 tensors
-    let y: Array<Int65>[] = Array();
+    let y: Array<Int64>[] = Array();
     // m1 = this.transpose(m1.value);
     let m2_t = this.transpose(m2.value);
     // let m2_t = m2.value;
     for (let i = 0; i < MATRIX_LENGTH; i++) {
       // console.log('in the first for loop -----------------', i);
-      let m_array = Array<Int65>();
+      let m_array = Array<Int64>();
       for (let j = 0; j < MATRIX_LENGTH; j++) {
         // console.log('in the second for loop', j);
         m_array[j] = this.dot_product_t1(m1.value[i], m2_t[j]);
@@ -100,13 +98,13 @@ export class SmartContractMul {
     // console.log('y[0][6].magnitude.value', y[0][6].magnitude.value);
   }
 
-  // Description:   Perform a dot product for two rank 1 tensors of type Int65
-  // Input:         m1 - Rank 1 Tensor of type Int65
-  //                m2 - Rank 1 Tensor of type Int65
-  // Output:        y - Dot product Rank 0 Tensor of type Int65
-  private dot_product_t1(v1: Array<Int65>, v2: Array<Int65>): Int65 {
+  // Description:   Perform a dot product for two rank 1 tensors of type Int64
+  // Input:         m1 - Rank 1 Tensor of type Int64
+  //                m2 - Rank 1 Tensor of type Int64
+  // Output:        y - Dot product Rank 0 Tensor of type Int64
+  private dot_product_t1(v1: Array<Int64>, v2: Array<Int64>): Int64 {
     console.log('in the dot product t1');
-    let y = Int65.zero;
+    let y = Int64.zero;
     console.assert(
       v1.length === v2.length,
       "tensor dimensions do not fit, can't do dot_product_t1"
@@ -115,10 +113,10 @@ export class SmartContractMul {
     return y;
   }
 
-  // Description:   Transpose a rank 2 tensor of type Int65
-  // Input:         x - Rank 2 Tensor of type Int65
-  // Output:        y - Transposed Rank 2 Tensor of type Int65 of x
-  private transpose(x: Array<Int65>[]): Array<Int65>[] {
+  // Description:   Transpose a rank 2 tensor of type Int64
+  // Input:         x - Rank 2 Tensor of type Int64
+  // Output:        y - Transposed Rank 2 Tensor of type Int64 of x
+  private transpose(x: Array<Int64>[]): Array<Int64>[] {
     // Transpose the rank 2 tensor
     console.log('in the transpose');
     let y = Array();
